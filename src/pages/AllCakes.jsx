@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useCakeStore } from "../store/cakeStore";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import DeleteConfirmation from "../components/shared/DeleteConfirmation";
 
 function AllCakes() {
 	//calling data from cakeStore.js | (CRUD: READ)
@@ -18,8 +19,36 @@ function AllCakes() {
 
 	const navigate = useNavigate();
 
+	//delete and delete modal
+	const [itemIdToDelete, setItemIdToDelete] = useState(0);
+	const [showModal, setShowModal] = useState(false);
+	const openDeleteConfimationModalHandler = (id) => {
+		setItemIdToDelete(id);
+		setShowModal(true);
+	};
+	const closeDeleteConfimationModalHandler = () => {
+		setItemIdToDelete(0);
+		setShowModal(false);
+	};
+	const deleteCakeAPICall = useCakeStore((state) => state.deleteCakeAPI);
+
+	const deleteConfirmHandler = async () => {
+		await deleteCakeAPICall(itemIdToDelete);
+		setShowModal(false);
+	};
+
 	return (
 		<div>
+			<DeleteConfirmation
+				showModal={showModal}
+				title="Delete Confimation"
+				body="Are you sure you want to delte this item?"
+				closeDeleteConfimationModalHandler={
+					closeDeleteConfimationModalHandler
+				}
+				deleteConfirmHandler={deleteConfirmHandler}
+			></DeleteConfirmation>
+
 			<Container className="mt-4">
 				<h1>ALl Cakes</h1>
 
@@ -28,7 +57,7 @@ function AllCakes() {
 						<Button
 							variant="primary"
 							type="button"
-							onClick={() => navigate("/add-cakes")}
+							onClick={() => navigate("/add-cake")}
 						>
 							Add
 						</Button>
@@ -48,6 +77,27 @@ function AllCakes() {
 								<Card.Body>
 									<Card.Title>{cake.name}</Card.Title>
 									<Card.Text>Price - {cake.cost}</Card.Text>
+									<Button
+										variant="primary"
+										type="button"
+										onClick={() =>
+											navigate(`/edit-cake/${cake.id}`)
+										}
+									>
+										Edit
+									</Button>{" "}
+									|{" "}
+									<Button
+										variant="danger"
+										type="button"
+										onClick={() =>
+											openDeleteConfimationModalHandler(
+												cake.id
+											)
+										}
+									>
+										Delete
+									</Button>
 								</Card.Body>
 							</Card>
 						</Col>

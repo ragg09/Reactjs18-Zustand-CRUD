@@ -1,26 +1,40 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Col, Container, Row, Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useCakeStore } from "../store/cakeStore";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCakeById, useCakeStore } from "../store/cakeStore";
 
-function AddCake() {
+export default function EditCake() {
+	const params = useParams();
+	const navigate = useNavigate();
+
+	//get specific data by id
+	const cakeToEdit = useCakeStore(getCakeById(params.id));
+
 	const name = useRef("");
 	const imageURL = useRef("");
 	const cost = useRef("");
 
-	//calling the api call
-	const addAPICall = useCakeStore((state) => state.addCakeAPI);
+	const updateAPICall = useCakeStore((state) => state.updateCakeAPI);
 
-	const navigate = useNavigate();
+	useEffect(() => {
+		if (cakeToEdit) {
+			name.current.value = cakeToEdit.name;
+			cost.current.value = cakeToEdit.cost;
+			imageURL.current.value = cakeToEdit.imageURL;
+		}
+	}, [cakeToEdit]);
 
-	//CREATE Trigger
-	const createHanlder = async () => {
+	const updateHandler = async () => {
 		let payload = {
 			name: name.current.value,
 			imageURL: imageURL.current.value,
 			cost: Number(cost.current.value),
+			id: Number(params.id),
 		};
-		await addAPICall(payload);
+
+		await updateAPICall(payload);
+
+		//return home after update
 		navigate("/");
 	};
 
@@ -29,7 +43,7 @@ function AddCake() {
 			<Container className="mt-2">
 				<Row>
 					<Col className="col-md-8 offset-md-2">
-						<legend>Create A New Cake</legend>
+						<legend>Update Cake</legend>
 						<Form.Group className="mb-3" controlId="formName">
 							<Form.Label>Name</Form.Label>
 							<Form.Control type="text" ref={name} />
@@ -45,9 +59,9 @@ function AddCake() {
 						<Button
 							variant="primary"
 							type="button"
-							onClick={createHanlder}
+							onClick={updateHandler}
 						>
-							Add
+							Update
 						</Button>
 					</Col>
 				</Row>
@@ -55,5 +69,3 @@ function AddCake() {
 		</>
 	);
 }
-
-export default AddCake;
