@@ -1,0 +1,28 @@
+{
+  "cakes": [
+    {
+      "id": 1,
+      "name": "Red Velvet",
+      "cost": 120,
+      "imageURL": "https://sallysbakingaddiction.com/wp-content/uploads/2019/02/red-velvet-cake-slice-2.jpg"
+    },
+    {
+      "name": "Triple Choco",
+      "imageURL": "https://sallysbakingaddiction.com/wp-content/uploads/2013/04/triple-chocolate-cake-4.jpg",
+      "cost": 2000,
+      "id": 2
+    },
+    {
+      "name": "testing",
+      "imageURL": "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+      "cost": 500,
+      "id": 3
+    },
+    {
+      "name": "testing",
+      "imageURL": "https://sallysbakingaddiction.com/wp-content/uploads/2013/04/triple-chocolate-cake-4.jpg",
+      "cost": 2000,
+      "id": 4
+    }
+  ]
+}
