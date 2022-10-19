@@ -11,7 +11,9 @@ function AllCakes() {
 	const allCakes = useCakeStore((state) => state.cakeData);
 	const getCakeAPICall = useCakeStore((state) => state.getCakeAPI);
 	useEffect(() => {
-		getCakeAPICall();
+		if (allCakes.length === 0) {
+			getCakeAPICall();
+		}
 	}, []);
 
 	const navigate = useNavigate();
